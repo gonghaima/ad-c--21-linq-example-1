@@ -14,7 +14,7 @@ class Program
         {
             FullName = e.FirstName + " " + e.LastName,
             AnnualSalary = e.AnnualSalary,
-        });
+        }).Where(e=>e.AnnualSalary > 50000).OrderBy(e=>e.FullName);
 
         foreach (var item in results)
         {
