@@ -10,12 +10,24 @@ class Program
         List<Employee> employeeList = Data.GetEmployees();
         List<Department> departmentList = Data.GetDepartments();
 
-        var results = employeeList.Select(e => new
-        {
-            FullName = e.FirstName + " " + e.LastName,
-            AnnualSalary = e.AnnualSalary,
-        }).Where(e=>e.AnnualSalary > 50000).OrderBy(e=>e.FullName);
+        //Select and Where Operators - Method Syntax
+        // var results = employeeList.Select(e => new
+        // {
+        //     FullName = e.FirstName + " " + e.LastName,
+        //     AnnualSalary = e.AnnualSalary,
+        // }).Where(e=>e.AnnualSalary > 50000).OrderBy(e=>e.FullName);
 
+        var results = from emp in employeeList
+                      where emp.AnnualSalary > 50000
+                      join d in departmentList on emp.DepartmentId equals d.Id
+                      select new
+                      {
+                          FullName = emp.FirstName + " " + emp.LastName,
+                          AnnualSalary = emp.AnnualSalary,
+                          Department = d.LongName
+                      };
+
+        // evaluate the query (deferred execution)
         foreach (var item in results)
         {
             Console.WriteLine($"{item.FullName, -20}  {item.AnnualSalary, 10}");
