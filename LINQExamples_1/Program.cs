@@ -27,6 +27,17 @@ class Program
                           Department = d.LongName
                       };
 
+        employeeList.Add(new Employee
+            {
+               Id = 5,
+               FirstName = "Sam",
+               LastName = "Davis",
+               AnnualSalary = 100000.20m,
+               IsManager = true,
+               DepartmentId = 2
+
+            });
+
         // evaluate the query (deferred execution)
         foreach (var item in results)
         {
