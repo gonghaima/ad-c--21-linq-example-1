@@ -17,33 +17,66 @@ class Program
         //     AnnualSalary = e.AnnualSalary,
         // }).Where(e=>e.AnnualSalary > 50000).OrderBy(e=>e.FullName);
 
-        var results = from emp in employeeList
-                      where emp.AnnualSalary > 50000
-                      join d in departmentList on emp.DepartmentId equals d.Id
-                      select new
-                      {
-                          FullName = emp.FirstName + " " + emp.LastName,
-                          AnnualSalary = emp.AnnualSalary,
-                          Department = d.LongName
-                      };
+        //Select and Where Operators - Query Syntax - Deferred Execution
+        // var results = from emp in employeeList
+        //               where emp.AnnualSalary > 50000
+        //               join d in departmentList on emp.DepartmentId equals d.Id
+        //               select new
+        //               {
+        //                   FullName = emp.FirstName + " " + emp.LastName,
+        //                   AnnualSalary = emp.AnnualSalary,
+        //                   Department = d.LongName
+        //               };
+
+        // employeeList.Add(new Employee
+        //     {
+        //        Id = 5,
+        //        FirstName = "Sam",
+        //        LastName = "Davis",
+        //        AnnualSalary = 100000.20m,
+        //        IsManager = true,
+        //        DepartmentId = 2
+        //     });
+
+        //Deferred Execution Example
+        var results = from emp in employeeList.GetHighSalariedEmployees()
+                        select new
+                        {
+                            FullName = emp.FirstName + " " + emp.LastName,
+                            AnnualSalary = emp.AnnualSalary
+                        };
 
         employeeList.Add(new Employee
-            {
-               Id = 5,
-               FirstName = "Sam",
-               LastName = "Davis",
-               AnnualSalary = 100000.20m,
-               IsManager = true,
-               DepartmentId = 2
+        {
+            Id = 5,
+            FirstName = "Sam",
+            LastName = "Davis",
+            AnnualSalary = 100000.20m,
+            IsManager = true,
+            DepartmentId = 2
 
-            });
+        });
 
-        // evaluate the query (deferred execution)
         foreach (var item in results)
         {
-            Console.WriteLine($"{item.FullName, -20}  {item.AnnualSalary, 10}");
+            Console.WriteLine($"{item.FullName,-20} {item.AnnualSalary,10}");
         }
         Console.ReadLine();
+    }
+}
+
+public static class EnumerableCollectionExtensionMethods
+{
+    public static IEnumerable<Employee> GetHighSalariedEmployees(this IEnumerable<Employee> employees)
+    {
+        foreach (Employee emp in employees)
+        {
+
+            Console.WriteLine($"Accessing employee: {emp.FirstName + " " + emp.LastName}");
+
+            if (emp.AnnualSalary >= 50000)
+                yield return emp;
+        }
     }
 }
 
