@@ -39,12 +39,19 @@ class Program
         //     });
 
         //Deferred Execution Example
-        var results = from emp in employeeList.GetHighSalariedEmployees()
+        // var results = from emp in employeeList.GetHighSalariedEmployees()
+        //                 select new
+        //                 {
+        //                     FullName = emp.FirstName + " " + emp.LastName,
+        //                     AnnualSalary = emp.AnnualSalary
+        //              };
+        //Immediate Execution Example
+        var results = (from emp in employeeList.GetHighSalariedEmployees()
                         select new
                         {
                             FullName = emp.FirstName + " " + emp.LastName,
                             AnnualSalary = emp.AnnualSalary
-                        };
+                        }).ToList();
 
         employeeList.Add(new Employee
         {
