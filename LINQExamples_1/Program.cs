@@ -45,28 +45,45 @@ class Program
         //                     FullName = emp.FirstName + " " + emp.LastName,
         //                     AnnualSalary = emp.AnnualSalary
         //              };
+
         //Immediate Execution Example
-        var results = (from emp in employeeList.GetHighSalariedEmployees()
-                        select new
-                        {
-                            FullName = emp.FirstName + " " + emp.LastName,
-                            AnnualSalary = emp.AnnualSalary
-                        }).ToList();
+        // var results = (from emp in employeeList.GetHighSalariedEmployees()
+        //                 select new
+        //                 {
+        //                     FullName = emp.FirstName + " " + emp.LastName,
+        //                     AnnualSalary = emp.AnnualSalary
+        //                 }).ToList();
 
-        employeeList.Add(new Employee
-        {
-            Id = 5,
-            FirstName = "Sam",
-            LastName = "Davis",
-            AnnualSalary = 100000.20m,
-            IsManager = true,
-            DepartmentId = 2
+        // employeeList.Add(new Employee
+        // {
+        //     Id = 5,
+        //     FirstName = "Sam",
+        //     LastName = "Davis",
+        //     AnnualSalary = 100000.20m,
+        //     IsManager = true,
+        //     DepartmentId = 2
 
-        });
+        // });
+
+        // foreach (var item in results)
+        // {
+        //     Console.WriteLine($"{item.FullName,-20} {item.AnnualSalary,10}");
+        // }
+
+        //Join Operator - method syntax
+        var results = departmentList.Join(employeeList,
+                                        employee => employee.Id,
+                                        department => department.DepartmentId,
+                                        (department, employee) => new
+                                        {
+                                            FullName = employee.FirstName + " " + employee.LastName,
+                                            AnnualSalary = employee.AnnualSalary,
+                                            DepartmentName = department.LongName
+                                        });
 
         foreach (var item in results)
         {
-            Console.WriteLine($"{item.FullName,-20} {item.AnnualSalary,10}");
+            Console.WriteLine($"{item.FullName,-20} {item.AnnualSalary,10}\t{item.DepartmentName}");
         }
         Console.ReadLine();
     }
