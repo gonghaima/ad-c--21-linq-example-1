@@ -81,21 +81,38 @@ static void Main(string[] args)
     //                                     DepartmentName = department.LongName
     //                                 });
 
-    // Join Operation Example - Query Syntax
-    var results = from dept in departmentList
-            join emp in employeeList
-            on dept.Id equals emp.DepartmentId
-            select new
-            {
-                FullName = emp.FirstName + " " + emp.LastName,
-                AnnualSalary = emp.AnnualSalary,
-                DepartmentName = dept.LongName
+    // // Join Operation Example - Query Syntax
+    // var results = from dept in departmentList
+    //         join emp in employeeList
+    //         on dept.Id equals emp.DepartmentId
+    //         select new
+    //         {
+    //             FullName = emp.FirstName + " " + emp.LastName,
+    //             AnnualSalary = emp.AnnualSalary,
+    //             DepartmentName = dept.LongName
 
-            };
+    //         };
+
+    // foreach (var item in results)
+    // {
+    //     Console.WriteLine($"{item.FullName,-20} {item.AnnualSalary,10}\t{item.DepartmentName}");
+    // }
+
+    //GroupJoin Operator Example - Method Syntax - (lef join)
+    var results = departmentList.GroupJoin(employeeList,
+            dept => dept.Id,
+            emp => emp.DepartmentId,
+            (dept,employeesGroup) => new {
+                Employees = employeesGroup,
+                DepartmentName = dept.LongName
+            }
+        );
 
     foreach (var item in results)
     {
-        Console.WriteLine($"{item.FullName,-20} {item.AnnualSalary,10}\t{item.DepartmentName}");
+        Console.WriteLine($"Department Name: {item.DepartmentName}");
+        foreach (var emp in item.Employees)
+            Console.WriteLine($"\t{emp.FirstName} {emp.LastName}");
     }
     Console.ReadLine();
 }
